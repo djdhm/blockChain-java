@@ -32,8 +32,16 @@ public class main {
                     System.out.println("Combien de bloques voulez vous ajouter à la chaine ?");
                     in = new Scanner(System.in);
                     int N = in.nextInt();
+                    if(chaineBloque.getListeBloque().size()==0){
+                        System.out.println("Introduire la donnée correspondante au bloque numéro " + 1);
+                        in = new Scanner(System.in);
+                        data = in.nextLine();
+                        Bloque nouveauBloque = new Bloque("Genesis Bloque", data);
+                        chaineBloque.getListeBloque().add(nouveauBloque);
+                        N=N-1;
+                    }
                     for (int i = 0; i < N; i++) {
-                        System.out.println("Introduire la donnée correspondante au bloque numéro " + i + 1);
+                        System.out.println("Introduire la donnée correspondante au bloque numéro " + i + 2);
                         in = new Scanner(System.in);
                         data = in.nextLine();
                         /*Pour recuperer le hash du bloque precedent*/
@@ -53,6 +61,9 @@ public class main {
                         System.out.println("| " + chaineBloque.getListeBloque().get(i).getHash().substring(32) + " |");
                         System.out.println("|                                  |");
                         System.out.println(" ----------------------------------");
+                        System.out.println("                 |                 ");
+                        System.out.println("                 |                 ");
+                        System.out.println("                 |                 ");
                     }
                     break;
                 case 4:
@@ -60,11 +71,15 @@ public class main {
                     in = new Scanner(System.in);
                     int numBloque = in.nextInt();
                     Bloque bloqueSelectionne = chaineBloque.getListeBloque().get(numBloque - 1);
-                    System.out.println("Le hash du bloque " + bloqueSelectionne.getHash());
-                    System.out.println("Le hash précedent du bloque " + bloqueSelectionne.getHashPrecedent());
-                    System.out.println("La données du bloque " + bloqueSelectionne.getData());
-                    System.out.println("Le timestamp du bloque " + bloqueSelectionne.getTimeStamp());
-                    System.out.println("Le nonce du bloque" + bloqueSelectionne.getNonce());
+                    System.out.println("|--------------------------------------------------------------------------------------|");
+                    System.out.println("|       ATTRIBUT |    VALEUR                                                           | ");
+                    System.out.println("|----------------|---------------------------------------------------------------------|");
+                    System.out.println("|     HASH       | "+bloqueSelectionne.getHash()+"    ");
+                    System.out.println("| HASH PRECEDENT | "+bloqueSelectionne.getHashPrecedent()+" ");
+                    System.out.println("|    DONNEES     | "+bloqueSelectionne.getData()+" ");
+                    System.out.println("|    TIMESTAMP   | "+bloqueSelectionne.getTimeStamp()+"   ");
+                    System.out.println("|    NONCE       | "+bloqueSelectionne.getNonce()+"     ");
+                    System.out.println("|----------------|---------------------------------------------------------------------|");
                     break;
                 case 5:
                     System.exit(0);
