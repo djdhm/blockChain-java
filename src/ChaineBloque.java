@@ -4,7 +4,7 @@ public class ChaineBloque {
 
 
     private ArrayList<Bloque> listeBloque;
-    public static int difficulte = 5;
+    public static int difficulte ;
 
     public ChaineBloque(){
         this.listeBloque=new ArrayList<Bloque>();

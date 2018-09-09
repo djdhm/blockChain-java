@@ -33,24 +33,6 @@ public class Bloque {
 
 
 
-
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    public void setHashPrecedent(String hashPrecedent) {
-        this.hashPrecedent = hashPrecedent;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
     public String getHash() {
         return hash;
     }
@@ -66,5 +48,9 @@ public class Bloque {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public int getNonce() {
+        return nonce;
     }
 }
