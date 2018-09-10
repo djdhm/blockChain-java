@@ -22,6 +22,7 @@ public class Bloque {
     }
 
     public void minerBlock(int difficulte) {
+        System.out.println("Bloque Mining ");
         String target = new String(new char[difficulte]).replace('\0', '0'); //Creer une chaine avec difficulte * "0"
         while(!hash.substring( 0, difficulte).equals(target)) {
             nonce ++;
