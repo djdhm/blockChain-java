@@ -10,6 +10,14 @@ public class ChaineBloque {
         this.listeBloque=new ArrayList<Bloque>();
 
     }
+    public int taille(){
+        return this.listeBloque.size();
+
+    }
+    public Bloque dernierBloque(){
+        return this.listeBloque.get(this.listeBloque.size()-1);
+
+    }
 
 
     public boolean estValide(){

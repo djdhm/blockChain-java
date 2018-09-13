@@ -1,13 +1,16 @@
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.util.Date;
 
-public class Bloque {
+public class Bloque implements Serializable {
     private String hash;
     private String hashPrecedent;
     private String data;
     private long timeStamp;
     private int nonce;
 
+
+    public static String GENESIS_BLOQUE="Genesis Bloque";
     public Bloque(String hashPrecedent, String data) {
         this.hashPrecedent = hashPrecedent;
         this.data = data;

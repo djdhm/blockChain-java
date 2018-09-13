@@ -24,7 +24,7 @@ public class main {
                     System.out.println("Introduire la donnée correspondante au bloque");
                     in = new Scanner(System.in);
                     data = in.nextLine();
-                    Bloque bloque = new Bloque("Genesis Bloque", data);
+                    Bloque bloque = new Bloque(Bloque.GENESIS_BLOQUE, data);
                     bloque.minerBlock(niveauDifficulte);/* miner le bloque avant de l'ajouter à la chaine du bloque*/
                     chaineBloque.getListeBloque().add(bloque);
                     break;
@@ -36,7 +36,7 @@ public class main {
                         System.out.println("Introduire la donnée correspondante au bloque numéro " + 1);
                         in = new Scanner(System.in);
                         data = in.nextLine();
-                        Bloque nouveauBloque = new Bloque("Genesis Bloque", data);
+                        Bloque nouveauBloque = new Bloque(Bloque.GENESIS_BLOQUE, data);
                         chaineBloque.getListeBloque().add(nouveauBloque);
                         N=N-1;
                     }
