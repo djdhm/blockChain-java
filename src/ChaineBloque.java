@@ -4,11 +4,11 @@ public class ChaineBloque {
 
 
     private ArrayList<Bloque> listeBloque;
-    public static int difficulte ;
+    private int difficulte;
 
     public ChaineBloque(){
         this.listeBloque=new ArrayList<Bloque>();
-
+        this.difficulte=4;
     }
     public int taille(){
         return this.listeBloque.size();
@@ -52,5 +52,9 @@ public class ChaineBloque {
 
     public void setListeBloque(ArrayList<Bloque> listeBloque) {
         this.listeBloque = listeBloque;
+    }
+
+    public void setDifficulte(int difficulte) {
+        this.difficulte = difficulte;
     }
 }
