@@ -8,7 +8,7 @@ public class Bloque implements Serializable {
     private String data;
     private long timeStamp;
     private int nonce;
-
+    private boolean encore;
 
     public static String GENESIS_BLOQUE="Genesis Bloque";
     public Bloque(String hashPrecedent, String data) {
@@ -34,9 +34,22 @@ public class Bloque implements Serializable {
         System.out.println("Bloque Resolu!!! : " + hash);
     }
 
+    public void minerBlockaDistance(int difficulte) {
+        System.out.println("Bloque Mining ");
+        encore=true;
+        String target = new String(new char[difficulte]).replace('\0', '0'); //Creer une chaine avec difficulte * "0"
+        while(encore && !hash.substring( 0, difficulte).equals(target)) {
+            nonce ++;
+            hash = calculerHash();
+        }
+        if(encore)    System.out.println("Bloque Resolu!!! : " + hash);
+        else System.out.println("Lqaweha chatryn ");
+    }
 
-
-
+  
+    public void arreterMining(){
+        encore=false;
+    }
     public String getHash() {
         return hash;
     }

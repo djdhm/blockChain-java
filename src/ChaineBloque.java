@@ -24,6 +24,14 @@ public class ChaineBloque {
         Bloque bloqueCourant,bloquePrecedent=listeBloque.get(0);
         String hashTarget = new String(new char[difficulte]).replace('\0', '0');
 
+        if(!bloquePrecedent.getHash().equals(bloquePrecedent.calculerHash())){
+            System.out.println("Premier bloque non valide");
+            return false;
+        }
+        if(!bloquePrecedent.getHash().substring( 0, difficulte).equals(hashTarget)) {
+            System.out.println("le premier bloque n'a pas ete resolu");
+            return false;
+        }
         if(!bloquePrecedent.getHash().equals(bloquePrecedent.calculerHash())) {
            return false;}
         for(int i=1;i<this.listeBloque.size();i++){
@@ -44,6 +52,14 @@ public class ChaineBloque {
 
         }
         return true;
+    }
+    public  boolean validerNouveauBloque(Bloque bloque){
+        this.listeBloque.add(bloque);
+        if(this.estValide()) {
+            return  true;
+        }
+        this.listeBloque.remove(bloque);
+        return false;
     }
 
     public ArrayList<Bloque> getListeBloque() {
