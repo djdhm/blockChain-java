@@ -6,15 +6,11 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 public class Client {
-    final static int MAX_T=2;
+
     public static MiningCountdown countdown = new MiningCountdown(1);
-    public static ArrayList<RemoteInterface> noeuds=new ArrayList<>();
-    public static void main(String[] argv) {
+    public static ArrayList<RemoteInterface> noeuds=new ArrayList<>();//La liste des noeuds
+    public static void main() {
         try {
-
-
-
-
             Remote r = Naming.lookup("rmi://localhost:1099/Noeud1");
             Remote r2 = Naming.lookup("rmi://localhost:1099/Noeud2");
             Remote r3 = Naming.lookup("rmi://localhost:1099/Noeud3");
@@ -33,10 +29,9 @@ public class Client {
 
             }
             countdown.await();
-            System.out.println("un noud a terminé ");
+            System.out.println("un noud a terminé le mining du nouveau bloque ");
             for (RemoteInterface noeud:noeuds){
-                System.out.println("ARRET IMMEDIAT");
-                System.out.println(countdown.getNouveauBloqueMine());
+                System.out.println("En train d'arreter les autres noeuds");
                 noeud.arreterMining(countdown.getNouveauBloqueMine());
             }
 

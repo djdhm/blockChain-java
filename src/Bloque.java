@@ -1,7 +1,7 @@
 import java.io.Serializable;
-import java.security.MessageDigest;
 import java.util.Date;
 
+// Bloque doit implementer l'interface Serializable pour que les instances Bloque peuvent etre communiquées via RMI
 public class Bloque implements Serializable {
     private String hash;
     private String hashPrecedent;
@@ -25,7 +25,7 @@ public class Bloque implements Serializable {
     }
 
     public void minerBlock(int difficulte) {
-        System.out.println("Bloque Mining ");
+
         String target = new String(new char[difficulte]).replace('\0', '0'); //Creer une chaine avec difficulte * "0"
         while(!hash.substring( 0, difficulte).equals(target)) {
             nonce ++;
@@ -35,9 +35,10 @@ public class Bloque implements Serializable {
     }
 
     public void minerBlockaDistance(int difficulte) {
-        System.out.println("Bloque Mining ");
+
         encore=true;
         String target = new String(new char[difficulte]).replace('\0', '0'); //Creer une chaine avec difficulte * "0"
+        //Tanque ce bloque n'a pas reçu un signal disant qu'un autre bloque a terminé de miner le nouveau bloque, il continue à miner
         while(encore && !hash.substring( 0, difficulte).equals(target)) {
             nonce ++;
             hash = calculerHash();
@@ -46,7 +47,15 @@ public class Bloque implements Serializable {
         else System.out.println("Lqaweha chatryn ");
     }
 
-  
+    // Verifie si le bloque est valide ou pas
+    public boolean estBloqueValide(String hashPrecedent,int difficulte){
+
+        if(!this.hashPrecedent.equals(hashPrecedent)) return false;
+        if(!this.calculerHash().equals(hash)) return false;
+        String hashTarget = new String(new char[difficulte]).replace('\0', '0');
+        if(!this.hash.substring(0,difficulte).equals(hashTarget)) return false;
+        return true;
+    }
     public void arreterMining(){
         encore=false;
     }

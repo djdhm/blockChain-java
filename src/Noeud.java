@@ -5,21 +5,22 @@ public class Noeud implements RemoteInterface {
     protected  ChaineBloque chaineBloque;
     protected Bloque bloqueActuel;
     public Noeud(){
-        this.chaineBloque=new ChaineBloque();
+        this.chaineBloque=new ChaineBloque(5);
 
     }
 
     @Override
+    //Miner le nouveau bloque
     public Bloque miner(String data) throws RemoteException {
 
         if(this.chaineBloque.taille()==0)
-        this.bloqueActuel=new Bloque(Bloque.GENESIS_BLOQUE,"exemple de data");
+        this.bloqueActuel=new Bloque(Bloque.GENESIS_BLOQUE,data);
         else{
             this.bloqueActuel=new Bloque(this.chaineBloque.dernierBloque().getHash(),data);
 
         }
 
-        bloqueActuel.minerBlockaDistance(6);
+        bloqueActuel.minerBlockaDistance(this.chaineBloque.getDifficulte());
         return bloqueActuel;
     }
 
@@ -38,10 +39,10 @@ public class Noeud implements RemoteInterface {
     public void arreterMining(Bloque bloque) throws RemoteException {
         System.out.println("Arret de mining dans le noeud ");
         System.out.println("je suis le neoud "+this.toString());
-        System.out.println("le nouveau bloque k j ai recu ");
+        System.out.println("le nouveau bloque que j'ai reçu ");
         System.out.println(bloque.getHash());
         if (        this.chaineBloque.validerNouveauBloque(bloque)) {
-            System.out.println("Nouveau Bloque Valide");
+            System.out.println("Nouveau Bloque validé");
             bloqueActuel.arreterMining();
         }
         else

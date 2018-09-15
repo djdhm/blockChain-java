@@ -6,9 +6,9 @@ public class ChaineBloque {
     private ArrayList<Bloque> listeBloque;
     private int difficulte;
 
-    public ChaineBloque(){
+    public ChaineBloque(int difficulte){
         this.listeBloque=new ArrayList<Bloque>();
-        this.difficulte=4;
+        this.difficulte=difficulte;
     }
     public int taille(){
         return this.listeBloque.size();
@@ -19,40 +19,20 @@ public class ChaineBloque {
 
     }
 
-
+    //Verifie si la chaine des bloques est valide en faisant appel à la methode estBloqueValide du Bloque
     public boolean estValide(){
         Bloque bloqueCourant,bloquePrecedent=listeBloque.get(0);
-        String hashTarget = new String(new char[difficulte]).replace('\0', '0');
-
-        if(!bloquePrecedent.getHash().equals(bloquePrecedent.calculerHash())){
-            System.out.println("Premier bloque non valide");
-            return false;
-        }
-        if(!bloquePrecedent.getHash().substring( 0, difficulte).equals(hashTarget)) {
-            System.out.println("le premier bloque n'a pas ete resolu");
-            return false;
-        }
-        if(!bloquePrecedent.getHash().equals(bloquePrecedent.calculerHash())) {
-           return false;}
+        if(!bloquePrecedent.estBloqueValide(Bloque.GENESIS_BLOQUE,difficulte)) return false;
         for(int i=1;i<this.listeBloque.size();i++){
             bloqueCourant=this.listeBloque.get(i);
             bloquePrecedent=this.listeBloque.get(i-1);
-            if(!bloqueCourant.getHash().equals(bloqueCourant.calculerHash())) {
-                System.out.println("hash courrant non valide");
-                return false;}
-
-            if(!bloqueCourant.getHashPrecedent().equals(bloquePrecedent.getHash()))
-            {    System.out.println("hash precedent non valide");
-                return false;}
-            //verifier si le puzzle a ete resolu
-            if(!bloqueCourant.getHash().substring( 0, difficulte).equals(hashTarget)) {
-                System.out.println("ce bloque n'a pas ete resolu");
+            if(!bloqueCourant.estBloqueValide(bloquePrecedent.getHash(),difficulte))
                 return false;
-            }
 
         }
         return true;
     }
+    //Si un bloque est valide on l'ajoute à la chaine des bloques
     public  boolean validerNouveauBloque(Bloque bloque){
         this.listeBloque.add(bloque);
         if(this.estValide()) {
@@ -65,12 +45,10 @@ public class ChaineBloque {
     public ArrayList<Bloque> getListeBloque() {
         return listeBloque;
     }
-
-    public void setListeBloque(ArrayList<Bloque> listeBloque) {
-        this.listeBloque = listeBloque;
-    }
-
     public void setDifficulte(int difficulte) {
         this.difficulte = difficulte;
+    }
+    public int getDifficulte(){
+        return this.difficulte;
     }
 }
