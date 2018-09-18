@@ -49,4 +49,5 @@ public class Noeud implements RemoteInterface {
             System.out.println("Nouveau bloque refusé ");
 
     }
+
 }
