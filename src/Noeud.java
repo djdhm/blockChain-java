@@ -1,7 +1,16 @@
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Noeud implements RemoteInterface {
 
+    public static final String ADDRESSE_SERVEUR="rmi://localhost:1099/Serveur";
     protected  ChaineBloque chaineBloque;
     protected Bloque bloqueActuel;
     public Noeud(){
@@ -50,4 +59,36 @@ public class Noeud implements RemoteInterface {
 
     }
 
+    @Override
+    public ArrayList<String> rechercher(String mot) throws RemoteException {
+        ArrayList<String> liste=new ArrayList<>();
+        if(!chaineBloque.estValide()) return null;
+        Iterator<Bloque> iterator=chaineBloque.getListeBloque().iterator();
+        while (iterator.hasNext()){
+            Bloque temp=iterator.next();
+            if(temp.getData().contains(mot)) liste.add(temp.getData());
+        }
+
+        return liste;
+    }
+
+    public void enregistreMoi(){
+        try {
+            String addresse="rmi://localhost:1099/"+this.hashCode();
+            Registry registry = LocateRegistry.getRegistry(1099);
+            RemoteInterface serveurSkeleton = (RemoteInterface) UnicastRemoteObject.exportObject(this,1099); // Génère un stub vers notre service.
+            Naming.rebind(addresse,serveurSkeleton);
+
+            RemoteServeur r = (RemoteServeur) Naming.lookup(ADDRESSE_SERVEUR);
+            r.enregistrerNoeud(addresse);
+            System.out.println("Noeud ajoute avec success au serveur : "+ADDRESSE_SERVEUR);
+
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 }

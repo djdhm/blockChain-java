@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -45,8 +46,60 @@ public class Serveur implements RemoteServeur,Serializable {
 
     @Override
     public boolean enregistrerNoeud(String addresse) throws RemoteException {
+        System.out.println("Ajout de neoud avec success");
         this.ajouterNoeud(addresse);
 
         return true;
+    }
+
+    @Override
+    public boolean ajouterData(String data) throws RemoteException {
+        MiningCountdown countdown=new MiningCountdown(1);
+        for (String addresse:
+             listeAddresseNoeuds) {
+
+                //RemoteInterface noeud=(RemoteInterface) Naming.lookup(addresse);
+                Thread thread=new Thread(new MiningRunnable(addresse,data,countdown ));
+                thread.start();
+        }
+
+
+        try {
+            countdown.await();
+            for (String addresse:listeAddresseNoeuds
+                 ) {
+                RemoteInterface r=(RemoteInterface) Naming.lookup(addresse);
+                r.arreterMining(countdown.getNouveauBloqueMine());
+
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (NotBoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Nouveau bloc miné avec succés");
+        return true;
+    }
+
+    @Override
+    public ArrayList<String> occurenceMot(String mot) throws RemoteException {
+        RechercheCountdown countdown=new RechercheCountdown(0);
+        for (String addresse:listeAddresseNoeuds
+             ) {
+                Thread thread=new Thread(new RechercheRunnable(addresse,countdown,mot));
+                thread.start();
+        }
+        try {
+            countdown.await();
+            return countdown.getResultat();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return  null;
     }
 }
