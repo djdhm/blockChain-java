@@ -1,6 +1,10 @@
+package RMI;
+import Structure.*;
+
+
 import java.rmi.RemoteException;
 // C'est un exemple qui illustre l'interet du mining: Proof of work
-public class NoeudTricheur extends  Noeud {
+public class NoeudTricheur extends Noeud {
 
    public NoeudTricheur(){
        super();

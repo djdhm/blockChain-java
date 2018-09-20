@@ -1,3 +1,7 @@
+package Structure;
+
+import Structure.Bloque;
+
 import java.util.ArrayList;
 
 public class ChaineBloque {
@@ -19,7 +23,7 @@ public class ChaineBloque {
 
     }
 
-    //Verifie si la chaine des bloques est valide en faisant appel à la methode estBloqueValide du Bloque
+    //Verifie si la chaine des bloques est valide en faisant appel à la methode estBloqueValide du Structure.Bloque
     public boolean estValide(){
         Bloque bloqueCourant,bloquePrecedent=listeBloque.get(0);
         if(!bloquePrecedent.estBloqueValide(Bloque.GENESIS_BLOQUE,difficulte)) return false;
@@ -45,9 +49,7 @@ public class ChaineBloque {
     public ArrayList<Bloque> getListeBloque() {
         return listeBloque;
     }
-    public void setDifficulte(int difficulte) {
-        this.difficulte = difficulte;
-    }
+
     public int getDifficulte(){
         return this.difficulte;
     }

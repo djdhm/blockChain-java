@@ -1,3 +1,5 @@
+package RMI;
+
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -22,7 +24,9 @@ public class RechercheCountdown extends CountDownLatch {
     }
 
     public ArrayList<String> getResultat() {
+        System.out.println("Dans CuntDown" +resultat);
         return resultat;
+
     }
 }
 

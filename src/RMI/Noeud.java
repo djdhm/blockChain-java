@@ -1,3 +1,7 @@
+package RMI;
+import Structure.Bloque;
+import Structure.ChaineBloque;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -8,10 +12,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Noeud implements RemoteInterface {
+public class Noeud implements RemoteNoeud {
 
     public static final String ADDRESSE_SERVEUR="rmi://localhost:1099/Serveur";
-    protected  ChaineBloque chaineBloque;
+    protected ChaineBloque chaineBloque;
     protected Bloque bloqueActuel;
     public Noeud(){
         this.chaineBloque=new ChaineBloque(5);
@@ -51,7 +55,7 @@ public class Noeud implements RemoteInterface {
         System.out.println("le nouveau bloque que j'ai reçu ");
         System.out.println(bloque.getHash());
         if (        this.chaineBloque.validerNouveauBloque(bloque)) {
-            System.out.println("Nouveau Bloque validé");
+            System.out.println("Nouveau Structure.Bloque validé");
             bloqueActuel.arreterMining();
         }
         else
@@ -61,6 +65,7 @@ public class Noeud implements RemoteInterface {
 
     @Override
     public ArrayList<String> rechercher(String mot) throws RemoteException {
+        System.out.println("Recheche dans noeud "+chaineBloque.getListeBloque());
         ArrayList<String> liste=new ArrayList<>();
         if(!chaineBloque.estValide()) return null;
         Iterator<Bloque> iterator=chaineBloque.getListeBloque().iterator();
@@ -72,16 +77,23 @@ public class Noeud implements RemoteInterface {
         return liste;
     }
 
+    @Override
+    public ArrayList<Bloque> afficherChaineBloque() throws  RemoteException{
+        return this.chaineBloque.getListeBloque();
+    }
+
+
+
     public void enregistreMoi(){
         try {
             String addresse="rmi://localhost:1099/"+this.hashCode();
             Registry registry = LocateRegistry.getRegistry(1099);
-            RemoteInterface serveurSkeleton = (RemoteInterface) UnicastRemoteObject.exportObject(this,1099); // Génère un stub vers notre service.
-            Naming.rebind(addresse,serveurSkeleton);
-
+            RemoteNoeud noeudSkeleton = (RemoteNoeud) UnicastRemoteObject.exportObject(this,1099); // Génère un stub vers notre service.
+            Naming.rebind(addresse,noeudSkeleton);
             RemoteServeur r = (RemoteServeur) Naming.lookup(ADDRESSE_SERVEUR);
+            System.out.println(r);
             r.enregistrerNoeud(addresse);
-            System.out.println("Noeud ajoute avec success au serveur : "+ADDRESSE_SERVEUR);
+            System.out.println("RMI.Noeud ajoute avec success au serveur : "+ADDRESSE_SERVEUR);
 
         } catch (NotBoundException e) {
             e.printStackTrace();
@@ -91,4 +103,5 @@ public class Noeud implements RemoteInterface {
             e.printStackTrace();
         }
     }
+
 }

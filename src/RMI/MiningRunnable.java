@@ -1,7 +1,10 @@
+package RMI;
+
+import Structure.Bloque;
 
 import java.rmi.Naming;
 import java.rmi.Remote;
-import java.util.concurrent.CountDownLatch;
+
 
 
 class MiningRunnable implements Runnable{
@@ -18,7 +21,7 @@ class MiningRunnable implements Runnable{
         try{
             Remote test = Naming.lookup(addresse);
             System.out.println(Thread.currentThread().getName()+": Commencement du mining dans le bloque "+addresse);
-            Bloque nouveau= ((RemoteInterface) test).miner(data);
+            Bloque nouveau= ((RemoteNoeud) test).miner(data);
             callback.countDown(nouveau);
 
         }

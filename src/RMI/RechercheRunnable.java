@@ -1,4 +1,5 @@
-import javax.naming.Name;
+package RMI;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -9,7 +10,7 @@ public class RechercheRunnable implements Runnable {
     private String mot;
     private String addresse;
     private RechercheCountdown countdown;
-    public RechercheRunnable(String addresse,RechercheCountdown countdown,String mot){
+    public RechercheRunnable(String addresse, RechercheCountdown countdown, String mot){
         this.mot=mot;
         this.countdown=countdown;
         this.addresse=addresse;
@@ -17,9 +18,8 @@ public class RechercheRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            RemoteInterface noeud=(RemoteInterface) Naming.lookup(addresse);
+            RemoteNoeud noeud=(RemoteNoeud) Naming.lookup(addresse);
             ArrayList<String> res=noeud.rechercher(mot);
-            System.out.println("Trouver une solution "+mot);
             if(res!=null) countdown.countDown(res);
 
 

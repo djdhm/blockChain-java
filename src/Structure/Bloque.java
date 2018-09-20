@@ -1,7 +1,9 @@
+package Structure;
+
 import java.io.Serializable;
 import java.util.Date;
 
-// Bloque doit implementer l'interface Serializable pour que les instances Bloque peuvent etre communiquées via RMI
+// Structure.Bloque doit implementer l'interface Serializable pour que les instances Structure.Bloque peuvent etre communiquées via RMI
 public class Bloque implements Serializable {
     private String hash;
     private String hashPrecedent;
@@ -10,7 +12,7 @@ public class Bloque implements Serializable {
     private int nonce;
     private boolean encore;
 
-    public static String GENESIS_BLOQUE="Genesis Bloque";
+    public static String GENESIS_BLOQUE="Genesis Structure.Bloque";
     public Bloque(String hashPrecedent, String data) {
         this.hashPrecedent = hashPrecedent;
         this.data = data;
@@ -31,7 +33,7 @@ public class Bloque implements Serializable {
             nonce ++;
             hash = calculerHash();
         }
-        System.out.println("Bloque Resolu!!! : " + hash);
+        System.out.println("Structure.Bloque Resolu!!! : " + hash);
     }
 
     public void minerBlockaDistance(int difficulte) {
@@ -43,7 +45,7 @@ public class Bloque implements Serializable {
             nonce ++;
             hash = calculerHash();
         }
-        if(encore)    System.out.println("Bloque Resolu!!! : " + hash);
+        if(encore)    System.out.println("Structure.Bloque Resolu!!! : " + hash);
         else System.out.println("Lqaweha chatryn ");
     }
 

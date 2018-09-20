@@ -1,3 +1,5 @@
+package Structure;
+
 import java.security.MessageDigest;
 
 public class OutilHash {

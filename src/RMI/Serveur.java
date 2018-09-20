@@ -1,3 +1,7 @@
+package RMI;
+
+import Structure.Bloque;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -14,40 +18,26 @@ public class Serveur implements RemoteServeur,Serializable {
     public Serveur(){
         this.listeAddresseNoeuds=new ArrayList<>();
     }
-    public boolean ajouterNoeud(String addresse){
-        this.listeAddresseNoeuds.add(addresse);
-        return true;
-    }
+
     public static void main(String [] args) {
-//        try {
-//            // 1099 est le port sur lequel sera publié le service. Nous devons le préciser  à la création du stub.
-//            RemoteInterface skeleton1 = (RemoteInterface) UnicastRemoteObject.exportObject(new Noeud(),1099); // Génère un stub vers notre service.
-//            RemoteInterface skeleton2 = (RemoteInterface) UnicastRemoteObject.exportObject(new Noeud(),1099); // Génère un stub vers notre service.
-//            RemoteInterface skeleton3 = (RemoteInterface) UnicastRemoteObject.exportObject(new NoeudTricheur(),1099); // Génère un stub vers notre service.
 //
-//            Registry registry = LocateRegistry.createRegistry(1099);
-//            Naming.rebind("rmi://localhost:1099/Noeud1", skeleton1); // publie la 1ere instance sous le nom "Noeud1"
-//            Naming.rebind("rmi://localhost:1099/Noeud2", skeleton2); // publie la 2eme instance sous le nom "Noeud2"
-//            Naming.rebind("rmi://localhost:1099/Noeud3", skeleton3); // publie la 3eme instance sous le nom "Noeud3"
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
            RemoteServeur serveurSkeleton = (RemoteServeur) UnicastRemoteObject.exportObject(new Serveur(),1099); // Génère un stub vers notre service.
-            Naming.rebind("rmi://localhost:1099/Serveur",serveurSkeleton);
+            Naming.rebind(Noeud.ADDRESSE_SERVEUR,serveurSkeleton);
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        System.out.println("Serveur is running ");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        System.out.println("RMI.Serveur is running ");
+
     }
 
     @Override
     public boolean enregistrerNoeud(String addresse) throws RemoteException {
         System.out.println("Ajout de neoud avec success");
-        this.ajouterNoeud(addresse);
+       this.listeAddresseNoeuds.add(addresse);
 
         return true;
     }
@@ -58,7 +48,7 @@ public class Serveur implements RemoteServeur,Serializable {
         for (String addresse:
              listeAddresseNoeuds) {
 
-                //RemoteInterface noeud=(RemoteInterface) Naming.lookup(addresse);
+                //RMI.RemoteNoeud noeud=(RMI.RemoteNoeud) Naming.lookup(addresse);
                 Thread thread=new Thread(new MiningRunnable(addresse,data,countdown ));
                 thread.start();
         }
@@ -68,7 +58,7 @@ public class Serveur implements RemoteServeur,Serializable {
             countdown.await();
             for (String addresse:listeAddresseNoeuds
                  ) {
-                RemoteInterface r=(RemoteInterface) Naming.lookup(addresse);
+                RemoteNoeud r=(RemoteNoeud) Naming.lookup(addresse);
                 r.arreterMining(countdown.getNouveauBloqueMine());
 
             }
@@ -88,6 +78,7 @@ public class Serveur implements RemoteServeur,Serializable {
 
     @Override
     public ArrayList<String> occurenceMot(String mot) throws RemoteException {
+        System.out.println("Occurence mot dans Serveur");
         RechercheCountdown countdown=new RechercheCountdown(0);
         for (String addresse:listeAddresseNoeuds
              ) {
@@ -95,11 +86,26 @@ public class Serveur implements RemoteServeur,Serializable {
                 thread.start();
         }
         try {
+            ArrayList<String> res=countdown.getResultat();
             countdown.await();
-            return countdown.getResultat();
+            return res;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return  null;
+    }
+
+    @Override
+    public ArrayList<Bloque> afficherChaineBloques() throws RemoteException{
+        try{
+            RemoteNoeud n=(RemoteNoeud) Naming.lookup(this.listeAddresseNoeuds.get(0));
+            return n.afficherChaineBloque();
+        }catch (NotBoundException e){
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
