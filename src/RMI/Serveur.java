@@ -35,6 +35,40 @@ public class Serveur implements RemoteServeur,Serializable {
     }
 
     @Override
+    public Bloque nouvelleChaine(String data) throws RemoteException {
+
+        MiningCountdown countdown=new MiningCountdown(1);
+        for (String addresse:
+                listeAddresseNoeuds) {
+
+            Thread thread=new Thread(new MiningRunnable(addresse,data,countdown ));
+            thread.start();
+        }
+
+
+        try {
+            countdown.await();
+            for (String addresse:listeAddresseNoeuds
+                    ) {
+                RemoteNoeud r=(RemoteNoeud) Naming.lookup(addresse);
+                r.nouvelleChaine(countdown.getNouveauBloqueMine());
+
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (NotBoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Nouveau bloc miné avec succés");
+        return countdown.getNouveauBloqueMine();
+    }
+
+    @Override
     public boolean enregistrerNoeud(String addresse) throws RemoteException {
         System.out.println("Ajout de neoud avec success");
        this.listeAddresseNoeuds.add(addresse);
@@ -43,7 +77,7 @@ public class Serveur implements RemoteServeur,Serializable {
     }
 
     @Override
-    public boolean ajouterData(String data) throws RemoteException {
+    public Bloque ajouterData(String data) throws RemoteException {
         MiningCountdown countdown=new MiningCountdown(1);
         for (String addresse:
              listeAddresseNoeuds) {
@@ -73,21 +107,22 @@ public class Serveur implements RemoteServeur,Serializable {
         }
 
         System.out.println("Nouveau bloc miné avec succés");
-        return true;
+        return countdown.getNouveauBloqueMine();
     }
 
     @Override
     public ArrayList<String> occurenceMot(String mot) throws RemoteException {
         System.out.println("Occurence mot dans Serveur");
-        RechercheCountdown countdown=new RechercheCountdown(0);
+        RechercheCountdown countdown=new RechercheCountdown(1);
         for (String addresse:listeAddresseNoeuds
              ) {
                 Thread thread=new Thread(new RechercheRunnable(addresse,countdown,mot));
                 thread.start();
         }
         try {
-            ArrayList<String> res=countdown.getResultat();
             countdown.await();
+            ArrayList<String> res=countdown.getResultat();
+            System.out.println("resultat : "+res);
             return res;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -99,6 +134,7 @@ public class Serveur implements RemoteServeur,Serializable {
     public ArrayList<Bloque> afficherChaineBloques() throws RemoteException{
         try{
             RemoteNoeud n=(RemoteNoeud) Naming.lookup(this.listeAddresseNoeuds.get(0));
+            System.out.println(n.afficherChaineBloque().size());
             return n.afficherChaineBloque();
         }catch (NotBoundException e){
             e.printStackTrace();

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FenetrePrincipal extends JFrame {
+    public static final Dimension PREFERRED_SIZE = new Dimension(180, 60);
     private ClientRMI clientRMI;
 
     public FenetrePrincipal(ClientRMI clientRMI){
@@ -19,7 +20,7 @@ public class FenetrePrincipal extends JFrame {
         JPanel pan=new JPanel();
 
         JButton boutton1=new JButton("Créer une nouvelle chaine de bloques");
-        boutton1.setPreferredSize(new Dimension(400,100));
+        boutton1.setPreferredSize(PREFERRED_SIZE);
         boutton1.setFont(new Font("Arial", Font.PLAIN, 20));
         boutton1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -28,7 +29,7 @@ public class FenetrePrincipal extends JFrame {
         } );
 
         JButton boutton2=new JButton("Afficher la chaine de bloques");
-        boutton2.setPreferredSize(new Dimension(400,100));
+        boutton2.setPreferredSize(PREFERRED_SIZE);
         boutton2.setFont(new Font("Arial", Font.PLAIN, 20));
         boutton2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -38,7 +39,7 @@ public class FenetrePrincipal extends JFrame {
 
 
         JButton boutton3=new JButton("Ajouter une nouvelle donnée à la chaine");
-        boutton3.setPreferredSize(new Dimension(400,100));
+        boutton3.setPreferredSize(PREFERRED_SIZE);
         boutton3.setFont(new Font("Arial", Font.PLAIN, 20));
         boutton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -49,7 +50,7 @@ public class FenetrePrincipal extends JFrame {
 
 
         JButton boutton4=new JButton("Chercher une données dans la chaine");
-        boutton4.setPreferredSize(new Dimension(400,100));
+        boutton4.setPreferredSize(PREFERRED_SIZE);
         boutton4.setFont(new Font("Arial", Font.PLAIN, 20));
         boutton4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -57,7 +58,11 @@ public class FenetrePrincipal extends JFrame {
             }
         } );
 
-
+        this.setLayout(new BorderLayout());
+        GridLayout mgr = new GridLayout(5,1);
+        mgr.setHgap(60);
+        mgr.setVgap(20);
+        pan.setLayout(mgr);
 
         pan.add(boutton1);
         pan.add(boutton2);

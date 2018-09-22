@@ -24,20 +24,27 @@ public class ClientRMI {
         }
     }
 
-    public boolean ajouterData(String data){
+    public Bloque creerChaine(String data){
+        try {
+            return  this.serveur.nouvelleChaine(data);
+        }catch (RemoteException e){
+
+        }
+        return null;
+    }
+    public Bloque ajouterData(String data){
         try {
             return this.serveur.ajouterData(data);
         }catch (RemoteException e){
             e.printStackTrace();
         }
-        return true;
+        return null;
     }
 
 
     public ArrayList<String> ChercherUnMot(String mot){
         try {
             System.out.println("Chercher un mot dans clientRMI");
-            System.out.println(this.serveur.occurenceMot(mot));
             return this.serveur.occurenceMot(mot);
         }catch (RemoteException e){
             e.printStackTrace();

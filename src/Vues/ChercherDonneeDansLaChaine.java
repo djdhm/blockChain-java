@@ -21,12 +21,16 @@ public class ChercherDonneeDansLaChaine extends JFrame {
 
 
         JButton chercherBoutton=new JButton("Chercher");
-        chercherBoutton.setPreferredSize(new Dimension(400,100));
-        chercherBoutton.setFont(new Font("Arial", Font.PLAIN, 20));
+        chercherBoutton.setPreferredSize(new Dimension(180,60));
+        chercherBoutton.setFont(new Font("Arial", Font.PLAIN, 14));
+
         chercherBoutton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> res=clientRMI.ChercherUnMot(inputRecherche.getText());
-                if(res==null){
+                System.out.println("res dans client "+res);
+                pan.removeAll();
+                if(res.size()==0){
                     JTextArea vide=new JTextArea("Cette données n'exite pas dans la chaine");
                     vide.setPreferredSize(new Dimension(400,100));
                     vide.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -38,13 +42,30 @@ public class ChercherDonneeDansLaChaine extends JFrame {
                         pan.add(donneeUnBloque);
                     }
                 }
+            rafraichier(pan);
 
             }
-        } );
 
+
+
+
+        });
         pan.add(inputRecherche);
         pan.add(chercherBoutton);
         this.setContentPane(pan);
         this.setVisible(true);
+
     }
+
+
+    public void rafraichier(JPanel panel) {
+        System.out.println("Rafraichissement");
+        this.setContentPane(panel);
+        this.repaint();
+    }
+
+
+
+
 }
+

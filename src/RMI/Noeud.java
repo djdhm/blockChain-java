@@ -82,6 +82,13 @@ public class Noeud implements RemoteNoeud {
         return this.chaineBloque.getListeBloque();
     }
 
+    @Override
+    public boolean nouvelleChaine(Bloque nouveauBloqueMine) throws RemoteException {
+        this.chaineBloque=new ChaineBloque(5);
+        this.chaineBloque.getListeBloque().add(nouveauBloqueMine);
+        System.out.println("Creation d'une nouvelle chaine de bloque ");
+        return true;
+    }
 
 
     public void enregistreMoi(){

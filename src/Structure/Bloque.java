@@ -46,7 +46,6 @@ public class Bloque implements Serializable {
             hash = calculerHash();
         }
         if(encore)    System.out.println("Structure.Bloque Resolu!!! : " + hash);
-        else System.out.println("Lqaweha chatryn ");
     }
 
     // Verifie si le bloque est valide ou pas

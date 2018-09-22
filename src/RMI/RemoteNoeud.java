@@ -13,4 +13,6 @@ public interface RemoteNoeud extends Remote{
     public void arreterMining(Bloque bloque) throws RemoteException;
     public ArrayList<String> rechercher(String mot) throws RemoteException;
     public ArrayList<Bloque> afficherChaineBloque() throws  RemoteException;
+
+    public boolean nouvelleChaine(Bloque nouveauBloqueMine) throws RemoteException;
 }

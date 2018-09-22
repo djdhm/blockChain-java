@@ -1,5 +1,6 @@
 package Vues;
 import RMI.ClientRMI;
+import Structure.Bloque;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +24,20 @@ public class AjouterNouvelleDonnees extends JFrame {
         ajouterBoutton.setFont(new Font("Arial", Font.PLAIN, 20));
         ajouterBoutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               clientRMI.ajouterData(inputNouvelleDonnee.getText());
+               Bloque nouveauBloque=clientRMI.ajouterData(inputNouvelleDonnee.getText());
+
+                pan.removeAll();
+                pan.add(new JLabel("Nouveau bloque miné"),BorderLayout.NORTH);
+                pan.add(new AffichageBloque(nouveauBloque,1),BorderLayout.CENTER);
+                JButton retour=new JButton("Retour");
+                retour.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        close();
+                    }
+                });
+                pan.add(retour,BorderLayout.PAGE_END);
+                raffraichir(pan);
             }
         } );
 
@@ -33,5 +47,14 @@ public class AjouterNouvelleDonnees extends JFrame {
         this.setVisible(true);
 
 
+    }
+
+    private void raffraichir(JPanel pan) {
+        this.setContentPane(pan);
+        this.repaint();
+    }
+
+    private void close() {
+    this.dispose();
     }
 }
